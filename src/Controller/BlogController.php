@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BlogController extends AbstractController
@@ -65,10 +68,69 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/blog/new", name="blog_create")
-     */
-    public function create()
+     * @Route("/blog(id)/edit", name-"blog_edit")
+     */           //12
+    public function create(Article $article = null,Request $request, EntityManagerInterface $manager) 
     {
-        return $this->render('blog/create.html.twig');
+        /*
+        La classe request est prefedefinies en symfony qui stock toutes les donnes par la superglobales ($_POST),($_Server)
+        on a acces aux donnes saisi dans le formulaire via l'ojet request 
+        la propriete $request-> represente la superglobale $_POST les donnees saisi  dans le formaulaire sont accesible via cette propriete
+        pour inserer un nouvelle article entite articlepour avoir un objet article vide afin de renseigner tous les setteurs de lobjet $article
+        entity manager interface interface predefinies de symfony qui permet de modier les lignes de la bdd elle a de methodes qui permettent d'executer les requete sql persist et flush
+        persist permet de preparer et de sticker
+        flush liberer et d'execueter
+        RedirecttoRoute methode predefini redirige apres insertion vers route(blog_show ou autre)detail l'article que lon viens d'insereret on transmet la methode de l'id de l'article aenvoyer dans l'url
+        get: methodede l'objet $request qui permet de recuperer les donnes saisaux differnts indice "name"du formulaire
+        */
+        dump($request);
+
+ //       if($request->request->count() > 0){
+//         $article =new Article;
+
+//  /           $article->setTitle($request->get('title'))
+//                     ->setContent($request->request ->get('content'))
+//                     ->setImage($request->request->get('image'))
+//                     ->setCreatedAt(new \datetime());
+
+//                     $manager->persist($article);
+//                     $manager->flush();
+//                     dump($article);
+//                     return $this->redirectToRoute('blog_show', [
+//                         'id'=> $article-getId()
+
+//                     ]
+//        
+        if(!$article)
+        {
+            $article = new article;
+        }
+        
+
+        $form = $this->createFormBuilder($article)             
+        ->add('title')
+        ->add('content')
+        ->add('image')
+        ->getForm();
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()&& $form->isValid()){
+            $article->setCreatedAt(new \dateTime);
+            $manager->persist($article);
+            $manager->flush();
+            dump($article);
+            return $this->redirectToRoute('blog_show',[
+                'id'=>$article->getId()
+            ]);
+            
+            
+
+        }
+                
+        return $this->render('blog/create.html.twig', [
+            'formArticle'=> $form->createView()
+        ]);
+       
     }
 
 
