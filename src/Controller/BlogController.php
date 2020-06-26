@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -68,9 +69,9 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/blog/new", name="blog_create")
-     * @Route("/blog(id)/edit", name-"blog_edit")
+     * @Route("/blog/{id}/edit", name="blog_edit")
      */           //12
-    public function create(Article $article = null,Request $request, EntityManagerInterface $manager) 
+    public function form(Article $article = null,Request $request, EntityManagerInterface $manager) 
     {
         /*
         La classe request est prefedefinies en symfony qui stock toutes les donnes par la superglobales ($_POST),($_Server)
@@ -101,19 +102,31 @@ class BlogController extends AbstractController
 
 //                     ]
 //        
+//Si l'article n'est pas existant,n'est pas defini est quil est nul,cela veut dire quil nya aucun ID n'a ete transmis dans l'URL donc c'est une insertion ,alors on instancie la class article afin d'avoirun objet $article vide
+//on entre dans la condition seulement dans le cas d'une insertion d'un nouvelle article.
         if(!$article)
         {
             $article = new article;
         }
-        
 
-        $form = $this->createFormBuilder($article)             
-        ->add('title')
-        ->add('content')
-        ->add('image')
-        ->getForm();
+
+// on importe la classe qui permet de creer le formulaire d'ajout/modification article
+//(articletype).on envoi un 2eme argumentobjet article pour bien specifierque lque le formaulaire est destinee  a remplir l'objet de l'article
+        $form = $this->createForm(ArticleType::class,$article);
+       
+        if(!$article->getId())
+
+        {
+        $article->setCreatedAt(new \datetime);
+        }
+
+        // $form = $this->createFormBuilder($article)             
+        // ->add('title')
+        // ->add('content')
+        // ->add('image')
+        // ->getForm();
         $form->handleRequest($request);
-
+//methode handlerequest permet de recuperer toute les valeurs 
         if($form->isSubmitted()&& $form->isValid()){
             $article->setCreatedAt(new \dateTime);
             $manager->persist($article);
@@ -128,7 +141,8 @@ class BlogController extends AbstractController
         }
                 
         return $this->render('blog/create.html.twig', [
-            'formArticle'=> $form->createView()
+            'formArticle'=> $form->createView(),
+            'editMode' => $article->getId() !==null
         ]);
        
     }
