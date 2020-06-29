@@ -16,10 +16,22 @@
             <h5 class="card-title">{{article.title}}</h5>
             <p class="card-text"> {{article.content}} </p>
        <span class="col-md-2"><a href="{{ path('blog_edit', {'id': article.id }) }}" class="text-left btn btn-warning"> Modifier </a></span>
+        <span class="col-md-2 offset-md-4 font-italic text-right">poste le{{article.createdAt |date("d/m/Y")}}
         </div>
     </div>
-    
-    
+    <h2>derniere avis </h2>
+    {% for comment in article.comments %}
+    <div class="row border roundedmb-2 bg dark text-white">
+    <div class="col-md-4">
+    <span>{{comment.author}}</span>
+    <small class="font-italic">{{comment.createdAt|date('d/m/Y à H:i:s')}}</small>
+    </div>
+    <div class="col-md-10">
+    <p>{{comment.content|raw}}</p>
+    </div>
+    </div>
+    {% endfor %}
+    </div>
 {% endblock %}
 
 

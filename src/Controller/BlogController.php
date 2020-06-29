@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Form\ArticleType;
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,25 +23,25 @@ class BlogController extends AbstractController
      * @Route("/blog", name="blog")
      */
     public function index(ArticleRepository $repo)
-
-    /*Un des principes de principe de base de Symfony est l'injection de dépendances.
-            Par exemple, ici dans le cas de la méthode index(), cette a besoin de la classe ArticleRepository pour fonctionner correctement, c'est à dire que la méthode index() dépend de la classe ArticleRepository
-            Donc ici on injecte une dépendance en argument de la méthode index(), on impose un objet issu de la classe ArticleRepository
-            Du coup plus besoin de faire appel à Doctrine (getDoctrine())
-            $repo est un objet issu de la classe ArticleRepository et nous avons accès à toute les méthodes issues de cette classe
-            Les méthodes sont moins chargé et c'est plus simple d'utilisation.
-
-    
-    /**
-     * pour selectionner des donneés en bdd nous avons besoin de la classe et de la class article
-     * une classe repository permet uniquement de selectionner des données en BDD requete SQL select
-     * on a besoin de l'ORM doctrine pour faire la relation entre le controller et la BDD( getdoctrine)
-     * get repostiry : methode issu de l'objet doctrine qui permet d'importer une classe requistory
-     * $repo et un objet issue de la class article repository cette methode est predefinies par symfonypermettant de selectionner des donnes en bdd 
-     * (find)
-     * findAll est une methode issue de la classe l article repository permettant de selectionner la table sql doc ici la table article
-     */
     {
+        /*Un des principes de principe de base de Symfony est l'injection de dépendances.
+                Par exemple, ici dans le cas de la méthode index(), cette a besoin de la classe ArticleRepository pour fonctionner correctement, c'est à dire que la méthode index() dépend de la classe ArticleRepository
+                Donc ici on injecte une dépendance en argument de la méthode index(), on impose un objet issu de la classe ArticleRepository
+                Du coup plus besoin de faire appel à Doctrine (getDoctrine())
+                $repo est un objet issu de la classe ArticleRepository et nous avons accès à toute les méthodes issues de cette classe
+                Les méthodes sont moins chargé et c'est plus simple d'utilisation.
+
+        
+        /**
+         * pour selectionner des donneés en bdd nous avons besoin de la classe et de la class article
+         * une classe repository permet uniquement de selectionner des données en BDD requete SQL select
+         * on a besoin de l'ORM doctrine pour faire la relation entre le controller et la BDD( getdoctrine)
+         * get repostiry : methode issu de l'objet doctrine qui permet d'importer une classe requistory
+         * $repo et un objet issue de la class article repository cette methode est predefinies par symfonypermettant de selectionner des donnes en bdd 
+         * (find)
+         * findAll est une methode issue de la classe l article repository permettant de selectionner la table sql doc ici la table article
+         */
+    
         $repo= $this-> getDoctrine()->getRepository(Article::class);
 
         $article= $repo ->findAll();

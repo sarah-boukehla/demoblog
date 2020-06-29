@@ -31,12 +31,6 @@ class Article
      * 
      * )
      */
-   
-
-
-
-
-
     private $title;
 
     /**

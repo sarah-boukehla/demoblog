@@ -11,13 +11,12 @@ elle contient les 10 articles selectionner en bdd
 
 #}
 
-{% for data in article%}
+    {% for data in article %}
     <div class="card" style="width: 18rem;">
-        <img src="{{ data.image}}
+        <img src="{{ data.image}}" alt="" class="card-img-top">
         {# nous piochons dans notre variable data avec le point '.'afin d'afficher l'image le contenu est la date de l'article cela se repete 10 fois avec la boucle for via data
 
         #}
-" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ data.title }}</h5>
             <p class="card-text"> {{ data.content|raw }} </p>
@@ -37,29 +36,6 @@ elle contient les 10 articles selectionner en bdd
         </div>
     </div>
   {% endfor %}
-
-
-
-    <div class="card" style="width: 18rem;">
-        <img src="https://picsum.photos/id/237/200/300
-" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href=" { { path ('blog_show')}}" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div>
-
-
-    <div class="card" style="width: 18rem;">
-        <img src="https://picsum.photos/200/300?grayscale
-" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href=" { { path ('blog_show')}}  " class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div>
-
+  
 </div>
 {% endblock %}
